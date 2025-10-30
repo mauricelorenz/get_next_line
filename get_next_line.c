@@ -6,7 +6,13 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 22:40:05 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/10/30 22:40:06 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/10/30 22:47:52 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
+
+char	*get_next_line(int fd)
+{
+	
+}

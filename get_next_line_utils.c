@@ -6,7 +6,8 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 22:40:08 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/10/30 22:40:10 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/10/30 23:08:14 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
