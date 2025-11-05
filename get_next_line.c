@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 22:40:05 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/05 14:24:41 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/05 23:59:19 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ char	*get_next_line(int fd)
 	buf_ptr = buf;
 	if (rest)
 	{
-		// count to \n or \0 and realloc memory for line
+		// count to \n or \0
+		// realloc memory for line
 		// copy to line till \n or \0
 		// return if \n found
 		// exit if \0 reached
