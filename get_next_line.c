@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 22:40:05 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/03 16:25:03 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/05 14:24:41 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,29 @@
 
 char	*get_next_line(int fd)
 {
-	size_t	loop_count;
-	char	*buf;
-	char	*buf_orig;
-	char	*line;
-	char	*line_orig;
+	static char	*rest;
+	char		buf[BUFFER_SIZE + 1];
+	char		*buf_ptr;
+	char		*line;
+	char		*line_orig;
 
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf)
-		return((char *)0);
+	rest = 0;
+	line = 0;
+	buf_ptr = buf;
+	if (rest)
+	{
+		// count to \n or \0 and realloc memory for line
+		// copy to line till \n or \0
+		// return if \n found
+		// exit if \0 reached
+	}
 	while (read(fd, buf, BUFFER_SIZE))
 	{
-		find_newline(buf)
-		if ()
-
-		line = malloc(BUFFER_SIZE + 1)
+		// null terminate buf
+		// count to \n or \0 and realloc memory for line
+		// copy to line
+		// if \n copy remaining buffer to rest and return
+		// if \0 reached start again
 	}
+	return (0);
 }
