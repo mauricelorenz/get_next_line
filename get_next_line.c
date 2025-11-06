@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 22:40:05 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/05 23:59:19 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/06 23:25:46 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,47 @@
 char	*get_next_line(int fd)
 {
 	static char	*rest;
+	char		*rest_orig;
 	char		buf[BUFFER_SIZE + 1];
 	char		*buf_ptr;
 	char		*line;
 	char		*line_orig;
+	int			all_app_ret;
+	int			read_ret;
 
-	rest = 0;
 	line = 0;
-	buf_ptr = buf;
-	if (rest)
+	line_orig = 0;
+	rest_orig = 0;
+	if (!rest)
+		rest = 0;
+	else
 	{
-		// count to \n or \0
-		// realloc memory for line
-		// copy to line till \n or \0
-		// return if \n found
-		// exit if \0 reached
+		all_app_ret = alloc_append(&line, &rest);
+		if (all_app_ret == 1)
+			return (line);
+		if (all_app_ret == -1)
+			return (free(rest_orig), (char *)0);
 	}
-	while (read(fd, buf, BUFFER_SIZE))
+	while (42)
 	{
-		// null terminate buf
-		// count to \n or \0 and realloc memory for line
-		// copy to line
-		// if \n copy remaining buffer to rest and return
-		// if \0 reached start again
+		read_ret = read(fd, buf, BUFFER_SIZE);
+		buf[read_ret] = '\0';
+		buf_ptr = buf;
+		all_app_ret = alloc_append(&line, &buf_ptr);
+		if (all_app_ret == -1)
+			return (0);
+		if (all_app_ret == 1)
+		{
+			rest = malloc(null_safe_strlen(buf_ptr) + 1);
+			if (!rest)
+				return (free(line_orig), (char *)0);
+			rest_orig = rest;
+			while (*buf_ptr)
+				*rest++ = *buf_ptr++;
+			*buf_ptr = '\0';
+			return (line);
+		}
+		return (line);
 	}
 	return (0);
 }
