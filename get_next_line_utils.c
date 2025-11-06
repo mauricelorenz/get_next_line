@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 22:40:08 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/06 00:04:20 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/06 23:00:44 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,14 @@ int	alloc_append(char **line, char **to_append)
 	line_orig = *line;
 	new = malloc(null_safe_strlen(*line) + find_newline(*to_append) + 1);
 	if (!new)
-		return (-1);
+		return (free(line_orig), -1);
 	new_orig = new;
-	while (**line)
-		*new++ = *(*line)++;
-	free(line_orig);
+	if (*line)
+	{
+		while (**line)
+			*new++ = *(*line)++;
+		free(line_orig);
+	}
 	while (**to_append)
 	{
 		if (**to_append != '\n')
