@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 22:40:08 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/06 23:00:44 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/07 16:49:51 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ size_t	find_newline(char *str)
 	while (*str)
 	{
 		if (*str == '\n')
-			return (i);
+			return (i + 1);
 		str++;
 		i++;
 	}
