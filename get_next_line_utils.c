@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:37:57 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/08 16:30:00 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/08 18:47:49 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,21 @@ void	str_append(char **str, char **to_add, char to_add_end)
 	while (i++ < len_to_add)
 		*str_ptr++ = *(*to_add)++;
 	*str_ptr = '\0';
+}
+
+int	new_rest(char **rest, char *buf_ptr)
+{
+	char	*rest_ptr;
+
+	free (*rest);
+	*rest = malloc(len_to_char(buf_ptr, '\0') + 1);
+	if (!rest)
+		return (1);
+	rest_ptr = *rest;
+	while (*buf_ptr)
+		*rest_ptr++ = *buf_ptr++;
+	*rest_ptr = '\0';
+	return (0);
 }
 
 size_t	len_to_char(char *s, char c)
