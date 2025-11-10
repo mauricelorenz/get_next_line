@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:37:39 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/08 19:12:11 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/09 01:08:23 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ char	*get_next_line(int fd)
 	size_t		bytes_read;
 
 	line = 0;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
 	if (rest_ptr)
 	{
 		create_or_grow_str(&line, rest_ptr, '\n');
@@ -32,6 +34,8 @@ char	*get_next_line(int fd)
 	while (42)
 	{
 		bytes_read = read(fd, buf, BUFFER_SIZE);
+		if (!bytes_read)
+			return (free(line), (char *)0);
 		buf[bytes_read] = '\0';
 		buf_ptr = buf;
 		create_or_grow_str(&line, buf_ptr, '\n');
@@ -43,5 +47,5 @@ char	*get_next_line(int fd)
 			return (line);
 		}
 	}
-	return (0);
+	return (free(line), (char *)0);
 }
