@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 16:05:11 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/11 16:05:14 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/11 17:41:02 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,8 @@
 # endif
 
 char	*get_next_line(int fd);
+int		rest_to_line(char **line, char **rest);
+size_t	gnl_strlen(char *s);
+size_t	gnl_nllen(char *s);
 
 #endif
