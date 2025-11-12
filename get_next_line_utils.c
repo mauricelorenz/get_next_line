@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 16:05:22 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/12 13:02:26 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/12 18:49:44 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 int	rest_to_line(char **line, char **rest, char **rest_orig)
 {
-	size_t	i;
 	size_t	rest_nllen;
 	char	*line_ptr;
 	char	*rest_ptr;
 
-	i = 0;
 	if (!rest || !*rest || !**rest)
 		return (0);
 	rest_ptr = *rest;
@@ -28,7 +26,7 @@ int	rest_to_line(char **line, char **rest, char **rest_orig)
 	if (!*line)
 		return (-1);
 	line_ptr = *line;
-	while (i++ < rest_nllen)
+	while (rest_nllen--)
 		*line_ptr++ = *rest_ptr++;
 	*line_ptr = '\0';
 	if (*rest_ptr)
@@ -37,7 +35,8 @@ int	rest_to_line(char **line, char **rest, char **rest_orig)
 		return (1);
 	}
 	free(*rest_orig);
-	rest = 0;
+	*rest_orig = 0;
+	*rest = 0;
 	return (0);
 }
 
@@ -57,15 +56,15 @@ int	read_to_line(char **line, char **buf, int fd)
 		else if (!bytes_read)
 			return (free(*buf), 1);
 		(*buf)[bytes_read] = '\0';
-		ret = buf_to_line(line, buf);
+		ret = buf_to_line(line, *buf);
 		if (ret == -1)
 			return (free(*buf), free(*line), -1);
 		if (ret == 1)
-			return (1);
+			return (free(*buf), 2);
 	}
 }
 
-int	buf_to_line(char **line, char **buf)
+int	buf_to_line(char **line, char *buf)
 {
 	size_t	buf_nllen;
 	char	*new_line;
@@ -73,13 +72,13 @@ int	buf_to_line(char **line, char **buf)
 	char	*line_ptr;
 	char	*buf_ptr;
 
-	buf_nllen = gnl_nllen(*buf);
+	buf_nllen = gnl_nllen(buf);
 	new_line = malloc(gnl_strlen(*line) + buf_nllen + 1);
 	if (!new_line)
 		return (-1);
 	new_line_ptr = new_line;
 	line_ptr = *line;
-	buf_ptr = *buf;
+	buf_ptr = buf;
 	if (line_ptr)
 		while (*line_ptr)
 			*new_line_ptr++ = *line_ptr++;

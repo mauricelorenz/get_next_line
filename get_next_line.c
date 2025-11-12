@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 16:05:17 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/12 13:00:29 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/12 18:25:30 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_next_line(int fd)
 	char		*buf;
 	char		*line;
 	static char	*rest;
-	char		*rest_orig;
+	static char	*rest_orig;
 	int			ret;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -31,9 +31,11 @@ char	*get_next_line(int fd)
 	ret = read_to_line(&line, &buf, fd);
 	if (ret == -1)
 		return (0);
-	else if (ret == 1)
+	else if (ret == 2)
+	{
 		ret = buf_to_rest(&buf, &rest);
-	rest_orig = rest;
+		rest_orig = rest;
+	}
 	if (ret == -1)
 		return (0);
 	return (line);
