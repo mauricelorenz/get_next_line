@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 16:05:11 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/11 22:21:46 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/12 13:01:45 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # endif
 
 char	*get_next_line(int fd);
-int		rest_to_line(char **line, char **rest);
+int		rest_to_line(char **line, char **rest, char **rest_orig);
 int		read_to_line(char **line, char **buf, int fd);
 int		buf_to_line(char **line, char **buf);
 int		buf_to_rest(char **buf, char **rest);
