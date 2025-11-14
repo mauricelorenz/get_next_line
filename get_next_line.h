@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:14 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/13 13:29:39 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/14 18:14:33 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@
 # endif
 
 char	*get_next_line(int fd);
-char	*ft_strchr(const char *s, int c);
-size_t	ft_strlen(const char *s);
-size_t	ft_nllen(const char *s);
+
 void	*ft_memcpy(void *dest, const void *src, size_t n);
+char	*ft_strchr(const char *s, int c);
+size_t	null_safe_nllen(const char *s);
+size_t	null_safe_strlen(const char *s);
 
 #endif
