@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/14 18:09:21 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/15 21:48:24 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*buf;
 	static char	*rest;
-	size_t		tmp_n;
+	ssize_t		tmp_n;
 	char		*tmp_ptr;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -34,16 +34,33 @@ char	*get_next_line(int fd)
 			if (!line)
 			{
 				free(rest);
+				rest = NULL;
 				return (NULL);
 			}
 			ft_memcpy(line, rest, tmp_n);
 			*(line + tmp_n) = '\0';
 			// set rest to index \n + 1 and free old rest
-			tmp_ptr = malloc(null_safe_strlen(rest) - tmp_n + 1);
-			ft_memcpy(tmp_ptr, rest + tmp_n, null_safe_strlen(rest) - tmp_n);
-			*(tmp_ptr + null_safe_strlen(rest) - tmp_n) = '\0';
-			free(rest);
-			rest = tmp_ptr;
+			if (*(rest + tmp_n))
+			{
+				tmp_ptr = malloc(null_safe_strlen(rest) - tmp_n + 1);
+				if (!tmp_ptr)
+				{
+					free(rest);
+					rest = NULL;
+					free(line);
+					line = NULL;
+					return (NULL);
+				}
+				ft_memcpy(tmp_ptr, rest + tmp_n, null_safe_strlen(rest) - tmp_n);
+				*(tmp_ptr + null_safe_strlen(rest) - tmp_n) = '\0';
+				free(rest);
+				rest = tmp_ptr;
+			}
+			else
+			{
+				free(rest);
+				rest = NULL;
+			}
 			// return line
 			return (line);
 		}
@@ -51,14 +68,18 @@ char	*get_next_line(int fd)
 		{
 			// copy rest till \0 to line
 			tmp_n = null_safe_strlen(rest);
-			line = malloc(tmp_n + 1);
-			if (!line)
+			if (tmp_n)
 			{
-				free(rest);
-				return (NULL);
+				line = malloc(tmp_n + 1);
+				if (!line)
+				{
+					free(rest);
+					rest = NULL;
+					return (NULL);
+				}
+				ft_memcpy(line, rest, tmp_n);
+				*(line + tmp_n) = '\0';
 			}
-			ft_memcpy(line, rest, tmp_n);
-			*(line + tmp_n) = '\0';
 			// free rest
 			free(rest);
 			rest = NULL;
@@ -68,34 +89,64 @@ char	*get_next_line(int fd)
 	{
 		// read to buf
 		buf = malloc(BUFFER_SIZE + 1);
+		if (!buf)
+		{
+			free(line);
+			line = NULL;
+			return (NULL);
+		}
 		tmp_n = read(fd, buf, BUFFER_SIZE);
-		*(buf + BUFFER_SIZE) = '\0';
-		// if read size = 0 return 0
-		if (!tmp_n && !line)
+		if (tmp_n == -1)
 		{
 			free(buf);
+			buf = NULL;
+			free(line);
+			line = NULL;
+			return (NULL);
+		}
+		// if read size = 0 return 0
+		if (!tmp_n && (!line || !*line))
+		{
+			free(buf);
+			buf = NULL;
 			return (NULL);
 		}
 		if (!tmp_n)
 		{
 			free(buf);
+			buf = NULL;
 			return (line);
 		}
+		*(buf + tmp_n) = '\0';
 		// if read_size < BUFFER_SIZE copy buf to line and return line
 		if (tmp_n < BUFFER_SIZE)
 		{
-			tmp_ptr = malloc(null_safe_strlen(line) + tmp_n + 1);
+			tmp_ptr = malloc(null_safe_strlen(line) + null_safe_nllen(buf) + 1);
 			if (!tmp_ptr)
 			{
-				free(line);
 				free(buf);
+				buf = NULL;
+				free(line);
+				line = NULL;
 				return (NULL);
 			}
 			ft_memcpy(tmp_ptr, line, null_safe_strlen(line));
-			ft_memcpy(tmp_ptr + null_safe_strlen(line), buf, tmp_n);
-			*(tmp_ptr + null_safe_strlen(line) + tmp_n) = '\0';
+			ft_memcpy(tmp_ptr + null_safe_strlen(line), buf, null_safe_nllen(buf));
+			*(tmp_ptr + null_safe_strlen(line) + null_safe_nllen(buf)) = '\0';
 			free(line);
 			line = tmp_ptr;
+			// copy buf to rest at index \n + 1 and free buf
+			rest = malloc(null_safe_strlen(buf) - null_safe_nllen(buf) + 1);
+			if (!rest)
+			{
+				free(buf);
+				buf = NULL;
+				free(line);
+				line = NULL;
+				return (NULL);
+			}
+			ft_memcpy(rest, buf + null_safe_nllen(buf), null_safe_strlen(buf) - null_safe_nllen(buf));
+			*(rest + null_safe_strlen(buf) - null_safe_nllen(buf)) = '\0';
 			free(buf);
 			buf = NULL;
 			return (line);
@@ -107,8 +158,10 @@ char	*get_next_line(int fd)
 			tmp_ptr = malloc(null_safe_strlen(line) + tmp_n + 1);
 			if (!tmp_ptr)
 			{
-				free(line);
 				free(buf);
+				buf = NULL;
+				free(line);
+				line = NULL;
 				return (NULL);
 			}
 			ft_memcpy(tmp_ptr, line, null_safe_strlen(line));
@@ -120,8 +173,10 @@ char	*get_next_line(int fd)
 			rest = malloc(null_safe_strlen(buf) - tmp_n + 1);
 			if (!rest)
 			{
-				free(line);
 				free(buf);
+				buf = NULL;
+				free(line);
+				line = NULL;
 				return (NULL);
 			}
 			ft_memcpy(rest, buf + tmp_n, null_safe_strlen(buf) - tmp_n);
@@ -136,8 +191,10 @@ char	*get_next_line(int fd)
 			tmp_ptr = malloc(null_safe_strlen(line) + tmp_n + 1);
 			if (!tmp_ptr)
 			{
-				free(line);
 				free(buf);
+				buf = NULL;
+				free(line);
+				line = NULL;
 				return (NULL);
 			}
 			ft_memcpy(tmp_ptr, line, null_safe_strlen(line));
