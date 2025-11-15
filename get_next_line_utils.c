@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:27 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/14 18:16:21 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/15 15:34:06 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,13 @@ size_t	null_safe_nllen(const char *s)
 	if (!s)
 		return (0);
 	i = 0;
-	while (*s++ != '\n')
+	while (*s)
+	{
+		if (*s++ == '\n')
+			return (i + 1);
 		i++;
-	return (i + 1);
+	}
+	return (i);
 }
 
 size_t	null_safe_strlen(const char *s)
