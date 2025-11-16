@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/16 19:57:08 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/16 23:45:03 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,10 @@ char	*get_next_line(int fd)
 		if (!tmp_n)
 			return (free_and_null(&buf), line);
 		*(buf + tmp_n) = '\0';
-		if (tmp_n < BUFFER_SIZE)
+		if (tmp_n < BUFFER_SIZE) // || ft_strchr(buf, '\n'))
 		{
+			// if (!malloc_and_append(&line, buf, null_safe_strlen(line), null_safe_nllen(buf)))
+			// 	return (NULL);
 			tmp_ptr = malloc(null_safe_strlen(line) + null_safe_nllen(buf) + 1);
 			if (!tmp_ptr)
 				return (free_and_null(&buf), free_and_null(&line));
@@ -66,6 +68,8 @@ char	*get_next_line(int fd)
 			*(tmp_ptr + null_safe_strlen(line) + null_safe_nllen(buf)) = '\0';
 			free(line);
 			line = tmp_ptr;
+			// if (!malloc_and_copy(&rest, buf + null_safe_nllen(buf), 0, null_safe_strlen(buf) - null_safe_nllen(buf)))
+			// 	return (NULL);
 			rest = malloc(null_safe_strlen(buf) - null_safe_nllen(buf) + 1);
 			if (!rest)
 				return (free_and_null(&buf), free_and_null(&line));
@@ -104,6 +108,21 @@ char	*get_next_line(int fd)
 			free_and_null(&buf);
 		}
 	}
+}
+
+char	*malloc_and_append(char **dst, char *src, size_t dst_len, size_t src_len)
+{
+	char	*new_dst;
+
+	new_dst = malloc(dst_len + src_len + 1);
+	if (!new_dst)
+		return (free_and_null(dst), free_and_null(&src));
+	ft_memcpy(new_dst, *dst, dst_len);
+	ft_memcpy(new_dst + dst_len, src, src_len);
+	*(new_dst + dst_len + src_len) = '\0';
+	free(*dst);
+	*dst = new_dst;
+	return (*dst);
 }
 
 char	*malloc_and_copy(char **dst, char *src, size_t dst_len, size_t src_len)
