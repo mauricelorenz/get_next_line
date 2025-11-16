@@ -6,11 +6,18 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:27 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/15 15:34:06 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/16 13:14:17 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*free_and_null(char **str)
+{
+	free(*str);
+	*str = NULL;
+	return (NULL);
+}
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
