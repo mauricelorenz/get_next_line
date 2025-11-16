@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/16 13:29:59 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/16 19:57:08 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,40 +27,21 @@ char	*get_next_line(int fd)
 	if (rest)
 	{
 		if (ft_strchr(rest, '\n'))
-		{
 			tmp_n = null_safe_nllen(rest);
-			line = malloc(tmp_n + 1);
-			if (!line)
-				return (free_and_null(&rest));
-			ft_memcpy(line, rest, tmp_n);
-			*(line + tmp_n) = '\0';
-			if (*(rest + tmp_n))
-			{
-				tmp_ptr = malloc(null_safe_strlen(rest) - tmp_n + 1);
-				if (!tmp_ptr)
-					return (free_and_null(&rest), free_and_null(&line));
-				ft_memcpy(tmp_ptr, rest + tmp_n, null_safe_strlen(rest) - tmp_n);
-				*(tmp_ptr + null_safe_strlen(rest) - tmp_n) = '\0';
-				free(rest);
-				rest = tmp_ptr;
-			}
-			else
-				free_and_null(&rest);
-			return (line);
+		else
+			tmp_n = null_safe_strlen(rest);
+		if (tmp_n)
+			if (!malloc_and_copy(&line, rest, 0, tmp_n))
+				return (NULL);
+		if (*(rest + tmp_n))
+		{
+			if (!malloc_and_copy(&rest, rest + tmp_n, null_safe_strlen(rest), null_safe_strlen(rest) - tmp_n))
+				return (NULL);
 		}
 		else
-		{
-			tmp_n = null_safe_strlen(rest);
-			if (tmp_n)
-			{
-				line = malloc(tmp_n + 1);
-				if (!line)
-					return (free_and_null(&rest));
-				ft_memcpy(line, rest, tmp_n);
-				*(line + tmp_n) = '\0';
-			}
 			free_and_null(&rest);
-		}
+		if (line && ft_strchr(line, '\n'))
+			return (line);
 	}
 	while (1)
 	{
@@ -123,4 +104,18 @@ char	*get_next_line(int fd)
 			free_and_null(&buf);
 		}
 	}
+}
+
+char	*malloc_and_copy(char **dst, char *src, size_t dst_len, size_t src_len)
+{
+	char	*new_dst;
+
+	new_dst = malloc(dst_len + src_len + 1);
+	if (!new_dst)
+		return (free_and_null(dst), free_and_null(&src));
+	ft_memcpy(new_dst, src, src_len);
+	*(new_dst + src_len) = '\0';
+	free(*dst);
+	*dst = new_dst;
+	return (*dst);
 }
