@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/17 16:07:10 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/17 16:41:29 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*get_next_line(int fd)
 	char		*buf;
 	static char	*rest;
 	ssize_t		tmp_n;
-	char		*tmp_ptr;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -56,56 +55,15 @@ char	*get_next_line(int fd)
 		if (!tmp_n)
 			return (free_and_null(&buf), line);
 		*(buf + tmp_n) = '\0';
-		if (tmp_n < BUFFER_SIZE) // || ft_strchr(buf, '\n'))
-		{
-			// if (!malloc_and_append(&line, buf, null_safe_strlen(line), null_safe_nllen(buf)))
-			// 	return (NULL);
-			tmp_ptr = malloc(null_safe_strlen(line) + null_safe_nllen(buf) + 1);
-			if (!tmp_ptr)
-				return (free_and_null(&buf), free_and_null(&line));
-			ft_memcpy(tmp_ptr, line, null_safe_strlen(line));
-			ft_memcpy(tmp_ptr + null_safe_strlen(line), buf, null_safe_nllen(buf));
-			*(tmp_ptr + null_safe_strlen(line) + null_safe_nllen(buf)) = '\0';
-			free(line);
-			line = tmp_ptr;
-			// if (!malloc_and_copy(&rest, buf + null_safe_nllen(buf), 0, null_safe_strlen(buf) - null_safe_nllen(buf)))
-			// 	return (NULL);
-			rest = malloc(null_safe_strlen(buf) - null_safe_nllen(buf) + 1);
-			if (!rest)
-				return (free_and_null(&buf), free_and_null(&line));
-			ft_memcpy(rest, buf + null_safe_nllen(buf), null_safe_strlen(buf) - null_safe_nllen(buf));
-			*(rest + null_safe_strlen(buf) - null_safe_nllen(buf)) = '\0';
-			return (free_and_null(&buf), line);
-		}
-		if (ft_strchr(buf, '\n'))
-		{
-			tmp_n = null_safe_nllen(buf);
-			tmp_ptr = malloc(null_safe_strlen(line) + tmp_n + 1);
-			if (!tmp_ptr)
-				return (free_and_null(&buf), free_and_null(&line));
-			ft_memcpy(tmp_ptr, line, null_safe_strlen(line));
-			ft_memcpy(tmp_ptr + null_safe_strlen(line), buf, tmp_n);
-			*(tmp_ptr + null_safe_strlen(line) + tmp_n) = '\0';
-			free(line);
-			line = tmp_ptr;
-			rest = malloc(null_safe_strlen(buf) - tmp_n + 1);
-			if (!rest)
-				return (free_and_null(&buf), free_and_null(&line));
-			ft_memcpy(rest, buf + tmp_n, null_safe_strlen(buf) - tmp_n);
-			*(rest + null_safe_strlen(buf) - tmp_n) = '\0';
-			return (free_and_null(&buf), line);
-		}
+		if (!malloc_and_append(&line, buf, null_safe_strlen(line), null_safe_nllen(buf)))
+			return (free_and_null(&buf), free_and_null(&line));
+		if (tmp_n == BUFFER_SIZE && !ft_strchr(buf, '\n'))
+			free_and_null(&buf);
 		else
 		{
-			tmp_ptr = malloc(null_safe_strlen(line) + tmp_n + 1);
-			if (!tmp_ptr)
+			if (!malloc_and_copy(&rest, buf + null_safe_nllen(buf), 0, null_safe_strlen(buf) - null_safe_nllen(buf)))
 				return (free_and_null(&buf), free_and_null(&line));
-			ft_memcpy(tmp_ptr, line, null_safe_strlen(line));
-			ft_memcpy(tmp_ptr + null_safe_strlen(line), buf, tmp_n);
-			*(tmp_ptr + null_safe_strlen(line) + tmp_n) = '\0';
-			free(line);
-			line = tmp_ptr;
-			free_and_null(&buf);
+			return (free_and_null(&buf), line);
 		}
 	}
 }
