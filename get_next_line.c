@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/16 23:45:03 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/17 16:07:10 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ char	*get_next_line(int fd)
 			tmp_n = null_safe_strlen(rest);
 		if (tmp_n)
 			if (!malloc_and_copy(&line, rest, 0, tmp_n))
-				return (NULL);
+				return (free_and_null(&rest));
 		if (*(rest + tmp_n))
 		{
 			if (!malloc_and_copy(&rest, rest + tmp_n, null_safe_strlen(rest), null_safe_strlen(rest) - tmp_n))
-				return (NULL);
+				return (free_and_null(&rest), free_and_null(&line));
 		}
 		else
 			free_and_null(&rest);
@@ -116,7 +116,7 @@ char	*malloc_and_append(char **dst, char *src, size_t dst_len, size_t src_len)
 
 	new_dst = malloc(dst_len + src_len + 1);
 	if (!new_dst)
-		return (free_and_null(dst), free_and_null(&src));
+		return (NULL);
 	ft_memcpy(new_dst, *dst, dst_len);
 	ft_memcpy(new_dst + dst_len, src, src_len);
 	*(new_dst + dst_len + src_len) = '\0';
@@ -131,7 +131,7 @@ char	*malloc_and_copy(char **dst, char *src, size_t dst_len, size_t src_len)
 
 	new_dst = malloc(dst_len + src_len + 1);
 	if (!new_dst)
-		return (free_and_null(dst), free_and_null(&src));
+		return (NULL);
 	ft_memcpy(new_dst, src, src_len);
 	*(new_dst + src_len) = '\0';
 	free(*dst);
