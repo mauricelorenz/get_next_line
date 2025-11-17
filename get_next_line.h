@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:14 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/17 19:44:04 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/17 20:11:49 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
 # endif
 
 char	*get_next_line(int fd);
+int		handle_read(char **rest, char **line, char **buf, int fd);
 int		handle_rest(char **rest, char **line);
-int		malloc_and_append(char **dst, char *src, size_t dst_len, size_t src_len);
+int		malloc_and_append(char **dst, char *src, size_t dst_len,
+			size_t src_len);
 int		malloc_and_copy(char **dst, char *src, size_t dst_len, size_t src_len);
 
 char	*free_and_null(char **str);

@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/17 19:44:46 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/17 20:11:41 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*buf;
 	static char	*rest;
-	ssize_t		tmp_n;
+	int			ret;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -32,28 +32,38 @@ char	*get_next_line(int fd)
 	}
 	while (1)
 	{
-		buf = malloc(BUFFER_SIZE + 1);
-		if (!buf)
-			return (free_and_null(&line));
-		tmp_n = read(fd, buf, BUFFER_SIZE);
-		if (tmp_n == -1)
-			return (free_and_null(&buf), free_and_null(&line));
-		if (!tmp_n && (!line || !*line))
-			return (free_and_null(&buf));
-		if (!tmp_n)
-			return (free_and_null(&buf), line);
-		*(buf + tmp_n) = '\0';
-		if (!malloc_and_append(&line, buf, null_safe_strlen(line), null_safe_nllen(buf)))
-			return (free_and_null(&buf), free_and_null(&line));
-		if (tmp_n == BUFFER_SIZE && !ft_strchr(buf, '\n'))
-			free_and_null(&buf);
-		else
-		{
-			if (!malloc_and_copy(&rest, buf + null_safe_nllen(buf), 0, null_safe_strlen(buf) - null_safe_nllen(buf)))
-				return (free_and_null(&buf), free_and_null(&line));
-			return (free_and_null(&buf), line);
-		}
+		ret = handle_read(&rest, &line, &buf, fd);
+		if (ret == 0)
+			return (NULL);
+		if (ret == 1)
+			return (line);
 	}
+}
+
+int	handle_read(char **rest, char **line, char **buf, int fd)
+{
+	ssize_t	tmp_n;
+
+	*buf = malloc(BUFFER_SIZE + 1);
+	if (!*buf)
+		return (free_and_null(line), 0);
+	tmp_n = read(fd, *buf, BUFFER_SIZE);
+	if (tmp_n == -1)
+		return (free_and_null(buf), free_and_null(line), 0);
+	if (!tmp_n && (!*line || !**line))
+		return (free_and_null(buf), 0);
+	if (!tmp_n)
+		return (free_and_null(buf), 1);
+	*(*buf + tmp_n) = '\0';
+	if (!malloc_and_append(line, *buf, null_safe_strlen(*line),
+			null_safe_nllen(*buf)))
+		return (free_and_null(buf), free_and_null(line), 0);
+	if (tmp_n == BUFFER_SIZE && !ft_strchr(*buf, '\n'))
+		return (free_and_null(buf), 2);
+	if (!malloc_and_copy(rest, *buf + null_safe_nllen(*buf), 0,
+			null_safe_strlen(*buf) - null_safe_nllen(*buf)))
+		return (free_and_null(buf), free_and_null(line), 0);
+	return (free_and_null(buf), 1);
 }
 
 int	handle_rest(char **rest, char **line)
@@ -69,7 +79,8 @@ int	handle_rest(char **rest, char **line)
 			return (free_and_null(rest), 0);
 	if (*(*rest + tmp_n))
 	{
-		if (!malloc_and_copy(rest, *rest + tmp_n, null_safe_strlen(*rest), null_safe_strlen(*rest) - tmp_n))
+		if (!malloc_and_copy(rest, *rest + tmp_n, null_safe_strlen(*rest),
+				null_safe_strlen(*rest) - tmp_n))
 			return (free_and_null(rest), free_and_null(line), 0);
 	}
 	else
