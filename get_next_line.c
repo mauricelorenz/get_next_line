@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/17 20:11:41 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/18 15:55:16 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*get_next_line(int fd)
 	{
 		if (!handle_rest(&rest, &line))
 			return (NULL);
-		if (line && ft_strchr(line, '\n'))
+		if (line && has_nl(line))
 			return (line);
 	}
 	while (1)
@@ -55,13 +55,13 @@ int	handle_read(char **rest, char **line, char **buf, int fd)
 	if (!tmp_n)
 		return (free_and_null(buf), 1);
 	*(*buf + tmp_n) = '\0';
-	if (!malloc_and_append(line, *buf, null_safe_strlen(*line),
-			null_safe_nllen(*buf)))
+	if (!malloc_and_append(line, *buf, len_to_char(*line, '\0'),
+			len_to_char(*buf, '\n')))
 		return (free_and_null(buf), free_and_null(line), 0);
-	if (tmp_n == BUFFER_SIZE && !ft_strchr(*buf, '\n'))
+	if (tmp_n == BUFFER_SIZE && !has_nl(*buf))
 		return (free_and_null(buf), 2);
-	if (!malloc_and_copy(rest, *buf + null_safe_nllen(*buf), 0,
-			null_safe_strlen(*buf) - null_safe_nllen(*buf)))
+	if (!malloc_and_copy(rest, *buf + len_to_char(*buf, '\n'), 0,
+			len_to_char(*buf, '\0') - len_to_char(*buf, '\n')))
 		return (free_and_null(buf), free_and_null(line), 0);
 	return (free_and_null(buf), 1);
 }
@@ -70,17 +70,17 @@ int	handle_rest(char **rest, char **line)
 {
 	size_t	tmp_n;
 
-	if (ft_strchr(*rest, '\n'))
-		tmp_n = null_safe_nllen(*rest);
+	if (has_nl(*rest))
+		tmp_n = len_to_char(*rest, '\n');
 	else
-		tmp_n = null_safe_strlen(*rest);
+		tmp_n = len_to_char(*rest, '\0');
 	if (tmp_n)
 		if (!malloc_and_copy(line, *rest, 0, tmp_n))
 			return (free_and_null(rest), 0);
 	if (*(*rest + tmp_n))
 	{
-		if (!malloc_and_copy(rest, *rest + tmp_n, null_safe_strlen(*rest),
-				null_safe_strlen(*rest) - tmp_n))
+		if (!malloc_and_copy(rest, *rest + tmp_n, len_to_char(*rest, '\0'),
+				len_to_char(*rest, '\0') - tmp_n))
 			return (free_and_null(rest), free_and_null(line), 0);
 	}
 	else

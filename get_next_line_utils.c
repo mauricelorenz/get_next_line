@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:27 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/16 13:14:17 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/18 15:58:32 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,18 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	has_nl(const char *s)
 {
 	while (*s)
 	{
-		if ((unsigned char)*s == (unsigned char)c)
-			return ((char *)s);
+		if ((unsigned char)*s == '\n')
+			return (1);
 		s++;
 	}
-	if ((unsigned char)c == '\0')
-		return ((char *)s);
 	return (0);
 }
 
-size_t	null_safe_nllen(const char *s)
+size_t	len_to_char(const char *s, char c)
 {
 	size_t	i;
 
@@ -57,21 +55,9 @@ size_t	null_safe_nllen(const char *s)
 	i = 0;
 	while (*s)
 	{
-		if (*s++ == '\n')
+		if (*s++ == '\n' && c == '\n')
 			return (i + 1);
 		i++;
 	}
-	return (i);
-}
-
-size_t	null_safe_strlen(const char *s)
-{
-	size_t	i;
-
-	if (!s)
-		return (0);
-	i = 0;
-	while (*s++)
-		i++;
 	return (i);
 }
