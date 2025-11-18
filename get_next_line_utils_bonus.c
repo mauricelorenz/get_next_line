@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:10:25 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/18 17:14:56 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/18 18:39:13 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	*gnl_memcpy(void *dst, const void *src, size_t n)
 	char_dst = (char *)dst;
 	char_src = (char *)src;
 	if (!dst && !src)
-		return (0);
+		return (NULL);
 	while (i++ < n)
 		*char_dst++ = *char_src++;
 	return (dst);
