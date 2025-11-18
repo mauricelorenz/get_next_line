@@ -6,17 +6,16 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:27 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/18 16:42:44 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/18 16:59:30 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*free_and_null(char **str)
+void	free_and_null(char **str)
 {
 	free(*str);
 	*str = NULL;
-	return (NULL);
 }
 
 void	*gnl_memcpy(void *dst, const void *src, size_t n)
