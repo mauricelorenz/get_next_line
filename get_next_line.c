@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:21 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/18 15:55:16 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/18 16:42:44 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int	malloc_and_append(char **dst, char *src, size_t dst_len, size_t src_len)
 	new_dst = malloc(dst_len + src_len + 1);
 	if (!new_dst)
 		return (0);
-	ft_memcpy(new_dst, *dst, dst_len);
-	ft_memcpy(new_dst + dst_len, src, src_len);
+	gnl_memcpy(new_dst, *dst, dst_len);
+	gnl_memcpy(new_dst + dst_len, src, src_len);
 	*(new_dst + dst_len + src_len) = '\0';
 	free(*dst);
 	*dst = new_dst;
@@ -110,7 +110,7 @@ int	malloc_and_copy(char **dst, char *src, size_t dst_len, size_t src_len)
 	new_dst = malloc(dst_len + src_len + 1);
 	if (!new_dst)
 		return (0);
-	ft_memcpy(new_dst, src, src_len);
+	gnl_memcpy(new_dst, src, src_len);
 	*(new_dst + src_len) = '\0';
 	free(*dst);
 	*dst = new_dst;

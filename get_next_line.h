@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:14 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/18 15:56:01 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/18 16:42:44 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		malloc_and_append(char **dst, char *src, size_t dst_len,
 int		malloc_and_copy(char **dst, char *src, size_t dst_len, size_t src_len);
 
 char	*free_and_null(char **str);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
+void	*gnl_memcpy(void *dest, const void *src, size_t n);
 int		has_nl(const char *s);
 size_t	len_to_char(const char *s, char c);
 

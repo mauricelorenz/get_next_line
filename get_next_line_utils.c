@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:00:27 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/18 15:58:32 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/18 16:42:44 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@ char	*free_and_null(char **str)
 	return (NULL);
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*gnl_memcpy(void *dst, const void *src, size_t n)
 {
 	size_t	i;
-	char	*char_dest;
+	char	*char_dst;
 	char	*char_src;
 
 	i = 0;
-	char_dest = (char *)dest;
+	char_dst = (char *)dst;
 	char_src = (char *)src;
-	if (!dest && !src)
+	if (!dst && !src)
 		return (0);
 	while (i++ < n)
-		*char_dest++ = *char_src++;
-	return (dest);
+		*char_dst++ = *char_src++;
+	return (dst);
 }
 
 int	has_nl(const char *s)
