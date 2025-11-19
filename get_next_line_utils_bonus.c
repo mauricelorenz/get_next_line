@@ -6,7 +6,7 @@
 /*   By: mlorenz <mlorenz@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:10:25 by mlorenz           #+#    #+#             */
-/*   Updated: 2025/11/18 18:39:13 by mlorenz          ###   ########.fr       */
+/*   Updated: 2025/11/19 15:56:35 by mlorenz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_and_null(char **str)
 	*str = NULL;
 }
 
-void	*gnl_memcpy(void *dst, const void *src, size_t n)
+void	*gnl_memmove(void *dst, const void *src, size_t n)
 {
 	size_t	i;
 	char	*char_dst;
@@ -27,10 +27,14 @@ void	*gnl_memcpy(void *dst, const void *src, size_t n)
 	i = 0;
 	char_dst = (char *)dst;
 	char_src = (char *)src;
-	if (!dst && !src)
-		return (NULL);
-	while (i++ < n)
-		*char_dst++ = *char_src++;
+	if (src == dst)
+		return (dst);
+	else if (src > dst)
+		while (i++ < n)
+			*char_dst++ = *char_src++;
+	else
+		while (i++ < n)
+			*((--char_dst) + n) = *((--char_src) + n);
 	return (dst);
 }
 
